@@ -7,9 +7,14 @@
 
 #ifndef PrimeFactor_HEADER
 #define PrimeFactor_HEADER
-
+#include <list>
 #include <string>
 #include "MOOS/libMOOS/MOOSLib.h"
+#include <cstdlib>
+#include <cstdint>
+#include <sstream>
+#include "MBUtils.h"
+
 using namespace std;
 
 class PrimeFactor : public CMOOSApp
@@ -26,8 +31,10 @@ class PrimeFactor : public CMOOSApp
 
  protected:
    void RegisterVariables();
-   int m_New_Number;
+   string m_New_Number;
+   list<string> m_List_of_Numbers;
    string m_number_result;
+   stringstream m_prime_factors;
 
  private: // Configuration variables
 
