@@ -16,7 +16,7 @@
 #include "MBUtils.h"
 
 using namespace std;
-
+ 
 class PrimeFactor : public CMOOSApp
 {
  public:
