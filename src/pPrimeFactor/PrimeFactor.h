@@ -14,6 +14,7 @@
 #include <cstdint>
 #include <sstream>
 #include "MBUtils.h"
+#include "PrimeEntry.h"
 
 using namespace std;
  
@@ -31,10 +32,12 @@ class PrimeFactor : public CMOOSApp
 
  protected:
    void RegisterVariables();
-   string m_New_Number;
-   list<string> m_List_of_Numbers;
-   string m_number_result;
-   stringstream m_prime_factors;
+   string m_input_string;
+   uint64_t m_input_int;
+   PrimeEntry m_new_entry;
+   int m_num_recieved;
+   int m_num_calc;
+   list<PrimeEntry> m_list_of_entries;
 
  private: // Configuration variables
 

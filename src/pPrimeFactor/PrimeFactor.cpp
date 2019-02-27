@@ -6,7 +6,6 @@
 /************************************************************/
 
 #include <iterator>
-#include "MBUtils.h"
 #include "PrimeFactor.h"
 
 using namespace std;
@@ -16,9 +15,8 @@ using namespace std;
 
 PrimeFactor::PrimeFactor()
 {
-  m_New_Number = "0";
-  m_number_result = "";
-  m_prime_factors.str("");
+  m_num_recieved = 1;
+  m_num_calc = 1;
 
 }
 
@@ -42,8 +40,14 @@ bool PrimeFactor::OnNewMail(MOOSMSG_LIST &NewMail)
 
     string key = msg.GetKey();
     if(key=="NUM_VALUE") {
-      m_New_Number = msg.GetString();
-      m_List_of_Numbers.push_back(m_New_Number);
+      m_input_string = msg.GetString();
+      uint64_t m_input_int = strtoul(m_input_string.c_str(), NULL, 0);
+      PrimeEntry m_new_entry;
+      m_new_entry.setOriginalVal(m_input_int);
+      m_new_entry.setRecievedIndex(m_num_recieved);
+      m_num_recieved++;
+
+      m_list_of_entries.push_back(m_new_entry);
     }
 
 #if 0 // Keep these around just for template
@@ -81,34 +85,20 @@ bool PrimeFactor::OnConnectToServer()
 
 bool PrimeFactor::Iterate()
 {
-  list<string>::iterator p;
-  for (p=m_List_of_Numbers.begin(); p!=m_List_of_Numbers.end();) {
+  list<PrimeEntry>::iterator p;
+  for (p=m_list_of_entries.begin(); p!=m_list_of_entries.end();) {
     
-    string str = *p;
-    m_prime_factors.str("");
-    
-    uint64_t original = strtoul(str.c_str(), NULL, 0);
-    uint64_t working = original;
+    PrimeEntry& current_entry = *p; //pull the first entry off the list and make it the current_entry
 
-    while(working%2 == 0) {
-      m_prime_factors << ":2";
-      working /= 2;
+    current_entry.factor(100000); //perform 100,000 steps towards calculating primes.
+
+    if(current_entry.done()){ //if all the primes for the current_entry have been determined
+      current_entry.setCalculatedIndex(m_num_calc);
+      m_num_calc++;
+      Notify("PRIME_RESULT", current_entry.getReport()); //Format and publish a report of primes and other data
+      p = m_list_of_entries.erase(p); //Remove the completed entry from the list
     }
-
-    for(int n=3; n<sqrt(original); n+=2) {
-      while(working%n == 0) {
-        m_prime_factors << ":" << to_string(n);
-        working /= n;
-      }
-    }
-    if(working != 1){m_prime_factors << ":" << to_string(working);}
-    p = m_List_of_Numbers.erase(p);
-    p++;
-
-    string cleanstring = m_prime_factors.str(); //erases leading ":" from string
-    m_prime_factors.str(cleanstring.erase(0,1));
-
-    Notify("NUM_RESULT", to_string(original) + " = " +  m_prime_factors.str());
+    p++; //incriment to the next item on the list
   }
     
   return(true);
@@ -148,5 +138,6 @@ bool PrimeFactor::OnStartUp()
 void PrimeFactor::RegisterVariables()
 {
    Register("NUM_VALUE", 0);
+   Register("PRIME_RESULT",0);
 }
 
