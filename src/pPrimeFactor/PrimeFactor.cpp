@@ -88,7 +88,7 @@ bool PrimeFactor::Iterate()
   list<PrimeEntry>::iterator p;
   for (p=m_list_of_entries.begin(); p!=m_list_of_entries.end();) {
     
-    PrimeEntry& current_entry = *p; //pull the first entry off the list and make it the current_entry
+    PrimeEntry& current_entry = *p; //pull the first entry off the list and make the current_entry object edit it
 
     current_entry.factor(100000); //perform 100,000 steps towards calculating primes.
 
