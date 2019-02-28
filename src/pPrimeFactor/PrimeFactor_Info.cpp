@@ -20,9 +20,9 @@ void showSynopsis()
 {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
-  blk("  The pPrimeFactor application is used for               ");
-  blk("                                                                ");
-  blk("                                                                ");
+  blk("  The pPrimeFactor application is used for calculating the prime");
+  blk("  factors of incoming numbers from the MOOS Variable NUM_VALUE. ");
+  blk("  Results are published to the MOOSEDB as PRIME_RESULT.         ");
   blk("                                                                ");
   blk("                                                                ");
 }
@@ -94,12 +94,13 @@ void showInterfaceAndExit()
   blk("                                                                ");
   blk("SUBSCRIPTIONS:                                                  ");
   blk("------------------------------------                            ");
-  blk("  NODE_MESSAGE = src_node=alpha,dest_node=bravo,var_name=FOO,   ");
-  blk("                 string_val=BAR                                 ");
+  blk("  NUM_VALUE = <uint64_t>                                        ");
   blk("                                                                ");
   blk("PUBLICATIONS:                                                   ");
   blk("------------------------------------                            ");
-  blk("  Publications are determined by the node message content.      ");
+  blk("  PRIME_RESULT = <str> ''orig=<uint_64t>[original NUM_VAL],received=<int>[order the number was recieved,");
+  blk("  calculated=<int>[order the prime factorization was completed],solve_time=<double>[time it took to calc],");
+  blk("  primes=<string>[list of the prime factors seperated by a colon ':'],username=<string>[user name]");
   blk("                                                                ");
   exit(0);
 }
