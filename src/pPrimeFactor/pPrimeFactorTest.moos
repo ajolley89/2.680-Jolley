@@ -37,7 +37,7 @@ ProcessConfig = uTimerScript
 //event = var=NUM_VALUE, val="$(7)", time=0.75
 //event = var=NUM_VALUE, val="$(5)", time=1.00
 
-event = var=NUM_VALUE, val="13", time=.25
+event = var=NUM_VALUE, val="$(13)", time=.25
 event = var=NUM_VALUE, val="1024", time=.5
 event = var=NUM_VALUE, val="1023", time=.75
 event = var=NUM_VALUE, val="1000", time=1.00

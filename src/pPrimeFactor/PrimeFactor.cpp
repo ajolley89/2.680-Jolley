@@ -15,8 +15,8 @@ using namespace std;
 
 PrimeFactor::PrimeFactor()
 {
-  m_num_recieved = 1;
-  m_num_calc = 1;
+  m_num_recieved = 1; //counter for the order numbers are recieved in
+  m_num_calc = 1; //counter for the order prime factorization is calculated in
 
 }
 
@@ -41,13 +41,13 @@ bool PrimeFactor::OnNewMail(MOOSMSG_LIST &NewMail)
     string key = msg.GetKey();
     if(key=="NUM_VALUE") {
       m_input_string = msg.GetString();
-      uint64_t m_input_int = strtoul(m_input_string.c_str(), NULL, 0);
-      PrimeEntry m_new_entry;
-      m_new_entry.setOriginalVal(m_input_int);
-      m_new_entry.setRecievedIndex(m_num_recieved);
-      m_num_recieved++;
+      uint64_t m_input_int = strtoul(m_input_string.c_str(), NULL, 0); //convert the incoming string to an unsigned long long
+      PrimeEntry m_new_entry; //create a new object of the class PrimeEntry
+      m_new_entry.setOriginalVal(m_input_int); //set the object member variable m_origin to the value read in from the string
+      m_new_entry.setRecievedIndex(m_num_recieved); //track the order numbers are recieved
+      m_num_recieved++; //incriment the order tracker
 
-      m_list_of_entries.push_back(m_new_entry);
+      m_list_of_entries.push_back(m_new_entry); //add this new object we just created onto a list
     }
 
 #if 0 // Keep these around just for template
@@ -85,18 +85,18 @@ bool PrimeFactor::OnConnectToServer()
 
 bool PrimeFactor::Iterate()
 {
-  list<PrimeEntry>::iterator p;
-  for (p=m_list_of_entries.begin(); p!=m_list_of_entries.end();) {
+  list<PrimeEntry>::iterator p; //create an iterator, p, to point to the members of the list that was edited in "On New Mail"
+  for (p=m_list_of_entries.begin(); p!=m_list_of_entries.end();) { //run  through each member of the list from start to finish
     
     PrimeEntry& current_entry = *p; //pull the first entry off the list and make the current_entry object edit it
 
     current_entry.factor(100000); //perform 100,000 steps towards calculating primes.
 
-    if(current_entry.done()){ //if all the primes for the current_entry have been determined
-      current_entry.setCalculatedIndex(m_num_calc);
-      m_num_calc++;
+    if(current_entry.done()){                             //if  all the primes for the current_entry have been determined then assign
+      current_entry.setCalculatedIndex(m_num_calc);       //then assign the object a completion number
+      m_num_calc++;                                      //and incriment the completion tracker
       Notify("PRIME_RESULT", current_entry.getReport()); //Format and publish a report of primes and other data
-      p = m_list_of_entries.erase(p); //Remove the completed entry from the list
+      p = m_list_of_entries.erase(p);                   //Remove the completed entry from the list
     }
     p++; //incriment to the next item on the list
   }
