@@ -13,6 +13,7 @@ ProcessConfig = ANTLER
   Run = pPrimeFactor @ NewConsole = false
   Run = uXMS         @ NewConsole = true
   Run = uTimerScript @ NewConsole = false
+  Run = pLogger      @ NewConsole = false
 }
 
 // uXMS configuration block
@@ -26,6 +27,15 @@ ProcessConfig = uXMS
    HISTORY_VAR = PRIME_RESULT
 }
 
+ProcessConfig = pLogger
+{
+  AsyncLog = true
+  WildCardLogging = true
+  WildCardOmitPattern = *_STATUS
+
+  LOG = PRIME_RESULT @ 0
+  LOG = NUM_VALUE @ 0
+}
 ProcessConfig = uTimerScript
 {
   AppTick = 4
@@ -37,15 +47,17 @@ ProcessConfig = uTimerScript
 //event = var=NUM_VALUE, val="$(7)", time=0.75
 //event = var=NUM_VALUE, val="$(5)", time=1.00
 
-event = var=NUM_VALUE, val="$(13)", time=.25
-event = var=NUM_VALUE, val="1024", time=.5
-event = var=NUM_VALUE, val="1023", time=.75
-event = var=NUM_VALUE, val="1000", time=1.00
-event = var=NUM_VALUE, val="$(5)", time=1.25
-event = var=NUM_VALUE, val="$(5)", time=1.5
-event = var=NUM_VALUE, val="$(5)", time=1.75
-event = var=NUM_VALUE, val="$(5)", time=2.00
-event = var=NUM_VALUE, val="$(5)", time=1.25
+   event  = var=NUM_VALUE, val="112582705942171", time=0.25
+   event  = var=NUM_VALUE, val="115797848077099", time=0.50
+   event  = var=NUM_VALUE, val="117463495419967", time=0.75
+
+   event  = var=NUM_VALUE, val="125", time=1.00
+   event  = var=NUM_VALUE, val="225", time=1.25
+   event  = var=NUM_VALUE, val="325", time=1.50
+
+   event  = var=NUM_VALUE, val="123939877913659", time=1.75
+   event  = var=NUM_VALUE, val="126794093929207", time=2.00
+   event  = var=NUM_VALUE, val="129263144299543", time=2.25
 
 
   reset_max = 0 
