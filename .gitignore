@@ -3,6 +3,7 @@
 bin/
 build/
 scripts/
+lib/
 # Compiled source #
 ###################
 *.com

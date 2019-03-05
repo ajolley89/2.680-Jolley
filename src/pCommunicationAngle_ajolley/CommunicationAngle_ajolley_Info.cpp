@@ -21,8 +21,8 @@ void showSynopsis()
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  The pCommunicationAngle_ajolley application is used for               ");
-  blk("                                                                ");
-  blk("                                                                ");
+  blk("  determining the apropriate angle to transmit sonar signals to         ");
+  blk("  a collaborator with a known position.  ");
   blk("                                                                ");
   blk("                                                                ");
 }
@@ -99,7 +99,7 @@ void showInterfaceAndExit()
   blk("                                                                ");
   blk("PUBLICATIONS:                                                   ");
   blk("------------------------------------                            ");
-  blk("  Publications are determined by the node message content.      ");
+  blk("  ACOUSTIC_PATH=elev_angle=<angle>,transmission_loss=<double>,id=<username>@mit.edu";
   blk("                                                                ");
   exit(0);
 }
