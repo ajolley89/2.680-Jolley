@@ -115,7 +115,7 @@ bool CommunicationAngle_ajolley::Iterate()
 
 
    double angle = defineCircle();
-   CalcTL();
+   
 
    if(m_theta_0 > m_theta_max){ //if a satisfactory circle was not found, output NaN and find a good path
       Notify("ACOUSTIC_PATH", "elev_angle=NaN,transmission_loss=NaN,id=ajolley@mit.edu");
@@ -150,7 +150,7 @@ double CommunicationAngle_ajolley::defineCircle()
   m_theta_0 = acos(c_z0/(sound_speed_gradient*m_radius));
    //m_theta_0 = atan( ( (m_horizontal_range*sound_speed_gradient) / (2*c_z0) ) + ( (surface_sound_speed*m_collaborator_depth) / (m_horizontal_range) ) + ( (pow(m_collaborator_depth,2)*sound_speed_gradient) / (2*m_horizontal_range*c_z0) ) - ( (surface_sound_speed*m_own_depth) / (c_z0*m_horizontal_range) ) - ( (pow(m_own_depth,2)*sound_speed_gradient) / (2*m_horizontal_range*c_z0)));
    //m_radius = c_z0 / (sound_speed_gradient*cos(m_theta_0)); //calculate m_radius of the transmission path
-  m_max_range = m_radius*(1+cos(PI/2-m_theta_0)); //calculate the maximum transmission range for the given transmission angle
+  m_max_range = m_radius*(1+cos(PI/2-m_theta_max)); //calculate the maximum transmission range for the given depth
 
    //Notify("TROUBLESHOOT1", "m_theta_0 = " + to_string(m_theta_0) + ", m_radius=" + to_string(m_radius) + ", c_z0=" + to_string(c_z0) + ", own_range_from_center =" + to_string(m_own_range_from_center));
 

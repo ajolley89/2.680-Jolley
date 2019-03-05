@@ -2,7 +2,6 @@
 .svn/
 bin/
 build/
-lib/
 scripts/
 # Compiled source #
 ###################
