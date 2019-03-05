@@ -1,0 +1,33 @@
+//------------------------------------------------
+// pCommunicationAngle_ajolley config block
+
+ServerHost = oceanai.mit.edu
+ServerPort = 9011
+//------------------------------------------
+// Antler configuration  block
+ProcessConfig = ANTLER
+{
+  MSBetweenLaunches = 200
+
+  Run = MOOSDB       @ NewConsole = false
+  Run = pCommunicationAngle_ajolley @ NewConsole = false
+  Run = uXMS         @ NewConsole = true
+  //Run = pLogger      @ NewConsole = false
+}
+
+ProcessConfig = uXMS
+{
+   AppTick   = 4
+   CommsTick = 4
+ 
+   VAR = VEHICLE_NAME, COLLABORATOR_NAME, ACOUSTIC_PATH, ACOUSTIC_PATH_REF, CONNECTIVITY_LOCATION, CONNECTIVITY_LOCATION_REF
+   VAR = NEPTUNE_NAV_X, NEPTUNE_NAV_Y, NEPTUNE_NAV_DEPTH
+   VAR = NAV_X, NAV_Y, NAV_DEPTH
+}
+
+ProcessConfig = pCommunicationAngle_ajolley
+{
+   AppTick   = 4
+   CommsTick = 4
+}
+
