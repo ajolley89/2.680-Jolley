@@ -4,6 +4,16 @@ bin/
 build/
 scripts/
 lib/
+
+#Ignore logs#
+###################
+
+*.alog
+*.blog
+*.xlog
+*.ylog
+*MOOSLog*
+
 # Compiled source #
 ###################
 *.com
