@@ -118,7 +118,7 @@ bool CommunicationAngle_ajolley::Iterate()
    
 
    if(m_theta_0 > m_theta_max){ //if a satisfactory circle was not found, output NaN and find a good path
-      Notify("ACOUSTIC_PATH", "elev_angle=NaN,transmission_loss=NaN,id=ajolley@mit.edu");
+      Notify("ACOUSTIC_PATH_jolley", "elev_angle=NaN,transmission_loss=NaN,id=ajolley@mit.edu");
       //FindPath();
       //Notify("CONNECTIVITY_LOCATION","x=" + to_string(m_connectivity_x) + ",y=" + to_string(m_connectivity_y) + ",depth=" + to_string(m_connectivity_depth) + ",id=ajolley@mit.edu.")
     }
@@ -127,8 +127,8 @@ bool CommunicationAngle_ajolley::Iterate()
       m_connectivity_x = m_own_x;
       m_connectivity_y = m_own_y;
       m_connectivity_depth = m_own_depth;
-      Notify("ACOUSTIC_PATH", "elev_angle=" + to_string(angle) +",transmission_loss=" + to_string(CalcTL()) + ",id=ajolley@mit.edu");
-      Notify("CONNECTIVITY_LOCATION","x=" + to_string(m_connectivity_x) + ",y=" + to_string(m_connectivity_y) + ",depth=" + to_string(m_connectivity_depth) + ",id=ajolley@mit.edu.");
+      Notify("ACOUSTIC_PATH_jolley", "elev_angle=" + to_string(angle) +",transmission_loss=" + to_string(CalcTL()) + ",id=ajolley@mit.edu");
+      Notify("CONNECTIVITY_LOCATION_jolley","x=" + to_string(m_connectivity_x) + ",y=" + to_string(m_connectivity_y) + ",depth=" + to_string(m_connectivity_depth) + ",id=ajolley@mit.edu.");
     }
 
 
@@ -152,7 +152,7 @@ double CommunicationAngle_ajolley::defineCircle()
    //m_radius = c_z0 / (sound_speed_gradient*cos(m_theta_0)); //calculate m_radius of the transmission path
   m_max_range = m_radius*(1+cos(PI/2-m_theta_max)); //calculate the maximum transmission range for the given depth
 
-   //Notify("TROUBLESHOOT1", "m_theta_0 = " + to_string(m_theta_0) + ", m_radius=" + to_string(m_radius) + ", c_z0=" + to_string(c_z0) + ", own_range_from_center =" + to_string(m_own_range_from_center));
+   Notify("TROUBLESHOOT1", "m_theta_0 = " + to_string(m_theta_0) + ", m_radius=" + to_string(m_radius) + ", c_z0=" + to_string(c_z0) + ", own_range_from_center =" + to_string(m_own_range_from_center));
 
   return((180/PI)*m_theta_0);
 
@@ -162,7 +162,7 @@ double CommunicationAngle_ajolley::defineCircle()
 double CommunicationAngle_ajolley::CalcTL()
 {
   double r_i = m_horizontal_range;
-  double delta_theta = 0.00001;
+  double delta_theta = 0.0001;
   double s_i = (asin(((r_i / m_radius) - sin(m_theta_0)))+m_theta_0)*m_radius;
   double grazing_angle = m_theta_0 - (s_i / m_radius);
   double r_i1= m_radius*(sin(m_theta_0+delta_theta)+sin(s_i/m_radius - (m_theta_0+delta_theta)));

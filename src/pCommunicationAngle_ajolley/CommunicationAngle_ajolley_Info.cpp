@@ -99,7 +99,7 @@ void showInterfaceAndExit()
   blk("                                                                ");
   blk("PUBLICATIONS:                                                   ");
   blk("------------------------------------                            ");
-  blk("  ACOUSTIC_PATH=elev_angle=<angle>,transmission_loss=<double>,id=<username>@mit.edu";
+  blk("  ACOUSTIC_PATH=elev_angle=<angle>,transmission_loss=<double>,id=<username>@mit.edu");
   blk("                                                                ");
   exit(0);
 }

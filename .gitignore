@@ -13,6 +13,11 @@ lib/
 *.xlog
 *.ylog
 *MOOSLog*
+LOG_*/
+
+#Ignore Auto Generated Files#
+####################
+targ_*
 
 # Compiled source #
 ###################
