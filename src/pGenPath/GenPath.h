@@ -29,7 +29,7 @@ class GenPath : public AppCastingMOOSApp
 
  protected:
    void registerVariables();
-   void m_parse_string(std::string point)
+   void m_parse_string(std::string point);
    int m_id;
    int m_x;
    int m_y;

@@ -99,22 +99,24 @@ bool GenPath::Iterate()
   AppCastingMOOSApp::Iterate();
   // Do your thing here!
   XYSegList sorted_waypoints;
-  int closest_index = m_waypoints.closest_vertex(m_nav_x, m_nav_y); //find the point closest to our starting location
-  double next_x = m_waypoints.get_vx(closest_index)
-  double next_y = m_waypoints.get_vy(closest_index)
+  XYSegList working_waypoints = m_waypoints;
+  int closest_index = working_waypoints.closest_vertex(m_nav_x, m_nav_y); //find the point closest to our starting location
+  double next_x = working_waypoints.get_vx(closest_index);
+  double next_y = working_waypoints.get_vy(closest_index);
+  working_waypoints.delete_vertex(closest_index);//remove vertex from the list so we dont double back
   sorted_waypoints.add_vertex(next_x, next_y); //make that point the begining of our sorted seglist
-  for(int i=1, i<100, i++){
-     closest_index = m_waypoints.closest_vertex(next_x, next_y);
-     double next_x = m_waypoints.get_vx(closest_index);
-     double next_y = m_waypoints.get_vy(closest_index);
-     sorted_waypoints.add_vertex(next_x, next_y);
+  for(int i=1; i<100; i++){
+     closest_index = working_waypoints.closest_vertex(next_x, next_y);//find the next closest vertex
+     double next_x = working_waypoints.get_vx(closest_index);
+     double next_y = working_waypoints.get_vy(closest_index);
+     sorted_waypoints.add_vertex(next_x, next_y);//add the next closest vertex to the sorted list
+     working_waypoints.delete_vertex(closest_index);//remove vertex from the list so we dont double back
   }
 
 
   string update_str = "points = ";
-  update_str += m_waypoints.get_vprop(closest_index);
+  update_str += sorted_waypoints.get_spec();
   Notify("WAYPOINT_UPDATE_" + m_vehicle_name, update_str);
-  if(m_waypoints.)
   AppCastingMOOSApp::PostReport();
   return(true);
 }

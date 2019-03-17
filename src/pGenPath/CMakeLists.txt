@@ -16,6 +16,6 @@ TARGET_LINK_LIBRARIES(pGenPath
    apputil
    mbutil
    m
-   pthread)
    geometry
+   pthread)
 
