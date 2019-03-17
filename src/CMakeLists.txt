@@ -20,7 +20,8 @@ INCLUDE_DIRECTORIES(${LOCAL_LIBRARY_DIRS})
 #ADD_SUBDIRECTORY(pPrimeFactor)
 #ADD_SUBDIRECTORY(pFoobar)
 #ADD_SUBDIRECTORY(pOdometry)
-ADD_SUBDIRECTORY(pCommunicationAngle_ajolley)
+#ADD_SUBDIRECTORY(pCommunicationAngle_ajolley)
+ADD_SUBDIRECTORY(pPointAssign)
 
 ##############################################################################
 #                           END of CMakeLists.txt
