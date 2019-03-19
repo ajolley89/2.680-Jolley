@@ -74,7 +74,7 @@ bool PointAssign::OnNewMail(MOOSMSG_LIST &NewMail)
     bool   mstr  = msg.IsString();
 #endif
 
-     if(key == "FOO") 
+     else if(key == "FOO") 
        cout << "great!";
 
      else if(key != "APPCAST_REQ") // handled by AppCastingMOOSApp
@@ -118,7 +118,7 @@ void PointAssign::m_assign_alternating(string point)
 
 void PointAssign::m_assign_regionally(string point)
 {
-  if(m_x >88){
+  if(m_x <88){
     //Assign to HENRY
     Notify("VISIT_POINT_"+m_boat1_name, point);
     m_color = "red";

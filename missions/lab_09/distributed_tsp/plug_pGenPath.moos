@@ -1,0 +1,13 @@
+//---------------------------------------------------------
+// pGenPath Config Block  (Created from Plugin)
+
+ProcessConfig = pGenPath
+{
+   AppTick   = 4
+   CommsTick = 4
+
+   VNAME = $(VNAME)
+   START_POS = $(START_POS)
+ 
+}
+

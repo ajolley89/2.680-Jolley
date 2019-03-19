@@ -8,7 +8,7 @@ ServerPort   = 9001
 Community    = alpha
 //----  Next Line was commented and replaced with a command line overload ---- //
 //MOOSTimeWarp = 1    (default)
-MOOSTimeWarp = 10
+MOOSTimeWarp = 20
 
 // Forest Lake
 LatOrigin  = 43.825300 

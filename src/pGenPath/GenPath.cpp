@@ -40,8 +40,10 @@ bool GenPath::OnNewMail(MOOSMSG_LIST &NewMail)
 
       if(key == "VISIT_POINT") {
         m_visit_point = msg.GetString();
-        m_parse_string(m_visit_point);
-        m_waypoints.add_vertex(m_x, m_y);
+        if(m_visit_point != "firstpoint" && m_visit_point != "lastpoint"){
+          m_parse_string(m_visit_point);
+          m_waypoints.add_vertex(m_x, m_y);
+        }
       }
 #if 0 // Keep these around just for template
     string comm  = msg.GetCommunity();
@@ -53,7 +55,7 @@ bool GenPath::OnNewMail(MOOSMSG_LIST &NewMail)
     bool   mstr  = msg.IsString();
 #endif
 
-     if(key == "FOO") 
+     else if(key == "FOO") 
        cout << "great!";
 
      else if(key != "APPCAST_REQ") // handled by AppCastingMOOSApp
@@ -98,6 +100,7 @@ bool GenPath::Iterate()
 {
   AppCastingMOOSApp::Iterate();
   // Do your thing here!
+
   XYSegList sorted_waypoints;
   XYSegList working_waypoints = m_waypoints;
   int closest_index = working_waypoints.closest_vertex(m_nav_x, m_nav_y); //find the point closest to our starting location
@@ -105,15 +108,13 @@ bool GenPath::Iterate()
   double next_y = working_waypoints.get_vy(closest_index);
   working_waypoints.delete_vertex(closest_index);//remove vertex from the list so we dont double back
   sorted_waypoints.add_vertex(next_x, next_y); //make that point the begining of our sorted seglist
-  for(int i=1; i<100; i++){
-     closest_index = working_waypoints.closest_vertex(next_x, next_y);//find the next closest vertex
-     double next_x = working_waypoints.get_vx(closest_index);
-     double next_y = working_waypoints.get_vy(closest_index);
+  for(int i=1; i<m_waypoints.size(); i++){
+     int closest_index = working_waypoints.closest_vertex(next_x, next_y);//find the next closest vertex
+     next_x = working_waypoints.get_vx(closest_index);
+     next_y = working_waypoints.get_vy(closest_index);
      sorted_waypoints.add_vertex(next_x, next_y);//add the next closest vertex to the sorted list
      working_waypoints.delete_vertex(closest_index);//remove vertex from the list so we dont double back
   }
-
-
   string update_str = "points = ";
   update_str += sorted_waypoints.get_spec();
   Notify("WAYPOINT_UPDATE_" + m_vehicle_name, update_str);
@@ -148,6 +149,17 @@ bool GenPath::OnStartUp()
     else if(param == "bar") {
       handled = true;
     }
+    else if(param == "vname") {
+      m_vehicle_name = toupper(value);
+      handled=true;
+    }    
+    else if(param == "start_pos") {
+      string m_start_pos = value;
+      m_nav_x = stoi(MOOSChomp(m_start_pos, ","));
+      m_nav_y = stoi(m_start_pos);
+      m_vehicle_name = toupper(value);
+      handled=true;
+    }        
 
     if(!handled)
       reportUnhandledConfigWarning(orig);
@@ -164,6 +176,7 @@ bool GenPath::OnStartUp()
 void GenPath::registerVariables()
 {
   AppCastingMOOSApp::RegisterVariables();
+  Register("VISIT_POINT",0);
   // Register("FOOBAR", 0);
 }
 
@@ -177,11 +190,7 @@ bool GenPath::buildReport()
   m_msgs << "File:                                        \n";
   m_msgs << "============================================ \n";
 
-  ACTable actab(4);
-  actab << "Alpha | Bravo | Charlie | Delta";
-  actab.addHeaderLines();
-  actab << "one" << "two" << "three" << "four";
-  m_msgs << actab.getFormattedString();
+  m_msgs << m_vehicle_name << " Waypoints Recieved: " << m_waypoints.size();
 
   return(true);
 }

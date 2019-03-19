@@ -9,7 +9,7 @@ ServerPort   = 9000
 Community    = shoreside
 //----  Next Line was commented and replaced with a command line overload ---- //
 //MOOSTimeWarp = 1    (default)
-MOOSTimeWarp = 10
+MOOSTimeWarp = 20
 
 VEHICLE_PORT = localhost:9201 & localhost:9202
 
@@ -49,15 +49,12 @@ ProcessConfig = pShare
 
   output = src_name=DEPLOY_ALPHA, dest_name = DEPLOY, route=localhost:9201
   output = src_name=RETURN_ALPHA, dest_name = RETURN, route=localhost:9201
-  
-  output = src_name=MOOS_MANUAL_OVERRIDE, route=localhost:9201
-  output = src_name=RETURN, route=localhost:9201 & localhost:9202
-  
+
   output = src_name=DEPLOY_BRAVO, dest_name = DEPLOY, route=localhost:9202
   output = src_name=RETURN_BRAVO, dest_name = RETURN, route=localhost:9202
-  output = src_name=MOOS_MANUAL_OVERRIDE, route=localhost:9202
-  output = src_name=RETURN, route=localhost:9202
 
+  output = src_name=MOOS_MANUAL_OVERRIDE, route=localhost:9201 & localhost:9202
+  output = src_name=RETURN, route=localhost:9201 & localhost:9202
   output = src_name=DEPLOY, route=localhost:9201 & localhost:9202
   
   
