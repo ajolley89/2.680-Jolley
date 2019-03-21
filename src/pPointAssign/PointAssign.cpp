@@ -111,7 +111,7 @@ void PointAssign::m_assign_alternating(string point)
   else{
     //Assign to GILDA;
     Notify("VISIT_POINT_"+m_boat2_name, point);
-    m_color = "blue";
+    m_color = "green";
   }
   return;
 }
@@ -126,7 +126,7 @@ void PointAssign::m_assign_regionally(string point)
   else{
     //Assign to GILDA
     Notify("VISIT_POINT_"+m_boat2_name, point);
-    m_color = "blue";
+    m_color = "yellow";
   }
   return;
 }
@@ -148,7 +148,6 @@ void PointAssign::m_assign_regionally(string point)
 bool PointAssign::OnConnectToServer()
 {
    registerVariables();
-   Notify("UTS_PAUSE", "false");
    return(true);
 }
 

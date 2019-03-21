@@ -17,6 +17,7 @@ using namespace std;
 
 GenPath::GenPath()
 {
+  m_sorted = false;
 }
 
 //---------------------------------------------------------
@@ -39,12 +40,28 @@ bool GenPath::OnNewMail(MOOSMSG_LIST &NewMail)
     string key    = msg.GetKey();
 
       if(key == "VISIT_POINT") {
+        m_sorted = false; //if new points are recieved, they are not sorted
         m_visit_point = msg.GetString();
         if(m_visit_point != "firstpoint" && m_visit_point != "lastpoint"){
           m_parse_string(m_visit_point);
           m_waypoints.add_vertex(m_x, m_y);
         }
       }
+
+      else if(key=="NAV_X"){
+        m_nav_x = msg.GetDouble();
+      }
+
+      else if(key=="NAV_Y"){
+        m_nav_y = msg.GetDouble();
+      }
+      
+      else if(key=="GENPATH_REGENERATE"){
+        m_sorted = false;
+        m_waypoints.add_vertex(m_start_x, m_start_y); 
+        Notify("COLLECT", "true");
+      }
+      
 #if 0 // Keep these around just for template
     string comm  = msg.GetCommunity();
     double dval  = msg.GetDouble();
@@ -89,6 +106,7 @@ void GenPath::m_parse_string(string point)
 bool GenPath::OnConnectToServer()
 {
    registerVariables();
+   Notify("UTS_PAUSE", "false");
    return(true);
 }
 
@@ -101,9 +119,30 @@ bool GenPath::Iterate()
   AppCastingMOOSApp::Iterate();
   // Do your thing here!
 
+  
+
+  if(m_sorted == false){ //if the waypoints have not been sorted yet, sort them
+    SortWaypoints();
+  }
+  if(m_sorted == true){ //if they are sorted, begin pulling points off the list as they are visited
+    int closest_waypoint = m_waypoints.closest_vertex(m_nav_x, m_nav_y); //find the vertext closest to the current position
+    double closest_x = m_waypoints.get_vx(closest_waypoint);
+    double closest_y = m_waypoints.get_vy(closest_waypoint);
+    double distance = sqrt(pow((closest_x-m_nav_x),2)+pow((closest_y-m_nav_y),2));
+    if(distance < visit_radius){
+      m_waypoints.delete_vertex(closest_waypoint);
+    }
+  }
+
+  AppCastingMOOSApp::PostReport();
+  return(true);
+}
+
+void GenPath::SortWaypoints()
+{
   XYSegList sorted_waypoints;
   XYSegList working_waypoints = m_waypoints;
-  int closest_index = working_waypoints.closest_vertex(m_nav_x, m_nav_y); //find the point closest to our starting location
+  int closest_index = working_waypoints.closest_vertex(m_start_x, m_start_y); //find the point closest to our starting location
   double next_x = working_waypoints.get_vx(closest_index);
   double next_y = working_waypoints.get_vy(closest_index);
   working_waypoints.delete_vertex(closest_index);//remove vertex from the list so we dont double back
@@ -115,13 +154,22 @@ bool GenPath::Iterate()
      sorted_waypoints.add_vertex(next_x, next_y);//add the next closest vertex to the sorted list
      working_waypoints.delete_vertex(closest_index);//remove vertex from the list so we dont double back
   }
-  string update_str = "points = ";
-  update_str += sorted_waypoints.get_spec();
-  Notify("WAYPOINT_UPDATE_" + m_vehicle_name, update_str);
-  AppCastingMOOSApp::PostReport();
-  return(true);
-}
+  string color;
+  if(next_x < 88){
+   color = "red";
+  }
+  if(next_x>88){
+   color = "yellow";
+  }
 
+  update_str = "points = ";
+  update_str += sorted_waypoints.get_spec();
+  update_str += " # visual_hints = edge_color = " + color + ", vertex_color = " + color;
+  
+
+  Notify("WAYPOINT_UPDATE_" + m_vehicle_name, update_str);
+  m_sorted = true;
+}
 //---------------------------------------------------------
 // Procedure: OnStartUp()
 //            happens before connection is open
@@ -155,11 +203,15 @@ bool GenPath::OnStartUp()
     }    
     else if(param == "start_pos") {
       string m_start_pos = value;
-      m_nav_x = stoi(MOOSChomp(m_start_pos, ","));
-      m_nav_y = stoi(m_start_pos);
-      m_vehicle_name = toupper(value);
+      m_start_x = stoi(MOOSChomp(m_start_pos, ","));
+      m_start_y = stoi(m_start_pos);
+      m_waypoints.add_vertex(m_start_x, m_start_y);
       handled=true;
-    }        
+    }       
+    else if(param == "visit_radius") {
+      visit_radius = stod(value);
+      handled=true;
+    }    
 
     if(!handled)
       reportUnhandledConfigWarning(orig);
@@ -177,6 +229,9 @@ void GenPath::registerVariables()
 {
   AppCastingMOOSApp::RegisterVariables();
   Register("VISIT_POINT",0);
+  Register("NAV_X",0);
+  Register("NAV_Y",0);
+  Register("GENPATH_REGENERATE");
   // Register("FOOBAR", 0);
 }
 
@@ -190,7 +245,8 @@ bool GenPath::buildReport()
   m_msgs << "File:                                        \n";
   m_msgs << "============================================ \n";
 
-  m_msgs << m_vehicle_name << " Waypoints Recieved: " << m_waypoints.size();
+  m_msgs << m_vehicle_name << " Waypoints Remaining: " << m_waypoints.size()<<endl;
+  m_msgs << "WAYPOINT_UPDATE = " << update_str<<endl;
 
   return(true);
 }

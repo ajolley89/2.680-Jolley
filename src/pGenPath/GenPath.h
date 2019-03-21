@@ -30,19 +30,26 @@ class GenPath : public AppCastingMOOSApp
  protected:
    void registerVariables();
    void m_parse_string(std::string point);
+   void SortWaypoints();
    int m_id;
    int m_x;
    int m_y;
+   double m_start_x;
+   double m_start_y;
    std::string point;
    std::string m_visit_point;
    XYSegList m_waypoints;
+   bool m_sorted;
 
  private: // Configuration variables
    std::string m_vehicle_name;
+   double visit_radius;
 
  private: // State variables
    double m_nav_x;
    double m_nav_y;
+   std::string update_str;
+
 };
 
 #endif 
