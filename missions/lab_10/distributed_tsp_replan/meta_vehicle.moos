@@ -22,7 +22,7 @@ Processconfig = ANTLER
   Run = pHostInfo          @ NewConsole = false
   Run = uFldNodeBroker     @ NewConsole = false
   Run = pGenPath           @ NewConsole = false
-  Run = uXMS               @ NewConsole = true
+  Run = uXMS               @ NewConsole = false
 
 }
  
