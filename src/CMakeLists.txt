@@ -23,6 +23,7 @@ ADD_SUBDIRECTORY(lib_behaviors-test)
 #ADD_SUBDIRECTORY(pCommunicationAngle_ajolley)
 #ADD_SUBDIRECTORY(pPointAssign)
 #ADD_SUBDIRECTORY(pGenPath)
+ADD_SUBDIRECTORY(pTempPassing)
 
 ##############################################################################
 #                           END of CMakeLists.txt
